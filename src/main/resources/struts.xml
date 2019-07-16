@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+   "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+   "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<!-- 可在struts过滤器初始化参数中配置 -->
+	<constant name="struts.devModel" value="true"></constant>
+	<!-- 配置相对路径下的vm文件位置 -->
+	<!-- <constant name="struts.convention.result.path" value="/vm" /> -->
+	<package name="myPackage" extends="struts-default,json-default" namespace="">
+		<!-- 拦截器必须在struts中配置，但可以用注解引用 -->
+		<!-- <interceptors> <interceptor name="myInterceptor" class="com.struts.syk.interceptor.InterceptorTest" /> <interceptor name="myInterceptor1" class="com.struts.syk.interceptor.InterceptorTest1" /> <interceptor-stack name="myDefault"> <interceptor-ref name="defaultStack"></interceptor-ref> <interceptor-ref name="myInterceptor"></interceptor-ref> <interceptor-ref name="myInterceptor1"></interceptor-ref> 
+			</interceptor-stack> </interceptors> -->
+		<!-- default-interceptor-ref只能引用自定义的拦截器或者堆栈，堆栈中可以包括默认拦截器，不能直接引用默认的拦截器 -->
+		<!-- <default-interceptor-ref name="myDefault" /> -->
+
+		<global-results>
+			<result name="exception" type="velocity">/vm/exception.vm </result>
+		</global-results>
+
+		<!-- 可以通过注解配置局部异常拦截 -->
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.NullPointerException" result="exception" />
+		</global-exception-mappings>
+
+		<action name="login" class="userAction" method="getLoginPage">
+			<result name="loginPage" type="velocity">
+				<param name="location">/vm/login.vm</param>
+			</result>
+			<result name="loginStat" type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="register" class="userAction" method="getRegisterPage">
+			<result name="registerPage" type="velocity">
+				<param name="location">/vm/register.vm</param>
+			</result>
+			<result name="registerStat" type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="userPage" class="userAction" method="getUserPage">
+			<result name="userPage" type="velocity">
+				<param name="location">/vm/userPage.vm</param>
+			</result>
+			<result name="loginPage" type="redirect">
+				<param name="location">/login</param>
+			</result>
+		</action>
+		<action name="logout" class="userAction" method="logout">
+			<result name="login" type="redirect">
+				<param name="location">/login</param>
+			</result>
+		</action>
+	</package>
+</struts>
